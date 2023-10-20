@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<span class="text-muted lead">* RP — Responsible Person</span>
+<table class="table table-sm table-bordered">
+    <thead class="thead-dark">
+          <tr>
+        <th scope="col">MOTHER</th>
+        <th scope="col">FATHER</th>
+        <th scope="col">RP</th>
+        <th scope="col">MOTHER PHONE</th>
+        <th scope="col">FATHER PHONE</th>
+        <th scope="col">RP PHONE</th>
+        <th scope="col">ADDRESS</th>
+        <th scope="col">COMMENT</th>
+
+    </thead>
+
+    <tr>
+        <td>{{parent.mother_full_name|default_if_none:""}}</td>
+        <td>{{parent.father_full_name|default_if_none:""}}</td>
+        <td>{{parent.responsible_person|default_if_none:""}}</td>
+        <td>{{parent.mother_contact_phone|default_if_none:""}}</td>
+        <td>{{parent.father_contact_phone|default_if_none:""}}</td>
+        <td>{{parent.rp_contact_phone|default_if_none:""}}</td>
+        <td>{{parent.address|default_if_none:""|upper}}</td>
+        <td>{{parent.comment|default_if_none:""|upper}}</td>
+    </tr>
+
+</table>
+{% endblock content %}
+

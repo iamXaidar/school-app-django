@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.urls import reverse
 
 
 # Create your models here.
@@ -39,6 +40,9 @@ class Class(models.Model):
 
     def __str__(self):
         return self.class_name
+
+    def get_absolute_url(self):
+        return reverse(viewname="student_class", kwargs={"class_name": self.class_name})
 
     class Meta:
         db_table = "class"
@@ -103,9 +107,12 @@ class Parent(models.Model):
 
     def __str__(self):
         if self.responsible_person is not None:
-            return f"RP: {self.responsible_person}"
+            return f"{self.responsible_person}"
         else:
-            return f"Parents: {self.father_full_name} and {self.mother_full_name}"
+            return f"{str(self.father_full_name).split()[0]} AND {str(self.mother_full_name).split()[0]}"
+
+    def get_absolute_url(self):
+        return reverse(viewname="parent", kwargs={"pk": self.parent_id})
 
     class Meta:
         db_table = "parent"
@@ -139,6 +146,9 @@ class Gender(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        db_table = "gender"
+
 
 class Profession(models.Model):
     profession_id = models.SmallAutoField(primary_key=True)
@@ -147,6 +157,9 @@ class Profession(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        db_table = "profession"
+
 
 class Subject(models.Model):
     subject_id = models.SmallAutoField(primary_key=True)
@@ -154,3 +167,6 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = "subject"

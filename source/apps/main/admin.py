@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.school_main import models
+from apps.main import models
 
 
 # Register your models here.

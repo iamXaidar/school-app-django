@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<form method="GET">
+    <label>YEAR: </label>
+    {{forms.year_of_foundation}}
+    <label>TEACHER: </label>
+    {{forms.classroom_teacher}}
+    <button type="Submit">Filter</button>
+</form>
+<table class="table table-sm table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">CLASS</th>
+            <th scope="col">YEAR OF FOUNDATION</th>
+            <th scope="col">CLASSROOM TEACHER</th>
+            <th scope="col">NUMBER OF STUDENTS</th>
+        </tr>
+    </thead>
+    {% for class in classes %}
+        <tr>
+            <td><a href="{{ class.get_absolute_url }}">{{class.class_name}}</a></td>
+            <td>{{class.year_of_foundation}}</td>
+            <td>{{class.classroom_teacher.first_name}} {{class.classroom_teacher.last_name}}</td>
+            <td>{{class.students_count}}</td>
+        </tr>
+    {% endfor %}
+</table>
+<!--Django default pagination-->
+<div class="pagination">
+    <div class="step-links">
+        <ul class="pagination pagination-sm">
+            {% if page_obj.has_previous %}
+                <li class="page-item page-item-dark"><a class="page-link" href="?page={{page_obj.previous_page_number}}"><<</a></li>
+            {% endif %}
+            {% for page in page_obj.paginator.page_range %}
+                {%if page_obj.number == page%}
+                    <li class="page-item disabled"><span class="page-link">{{ page }}</span></li>
+                {% elif page >= page_obj.number|add:-2 and page <= page_obj.number|add:2 %}
+                    <li class="page-item page-item-dark"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item page-item-dark"><a class="page-link" href="?page={{page_obj.next_page_number}}">>></a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock content %}

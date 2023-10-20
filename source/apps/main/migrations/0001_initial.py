@@ -79,8 +79,8 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField(blank=True, null=True)),
                 ('date_of_create', models.DateTimeField(auto_now_add=True)),
                 ('date_of_update', models.DateTimeField(auto_now=True)),
-                ('gender', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.gender')),
-                ('subject', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.subject')),
+                ('gender', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.gender')),
+                ('subject', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.subject')),
             ],
             options={
                 'db_table': 'teacher',
@@ -99,8 +99,8 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField(blank=True, null=True)),
                 ('date_of_create', models.DateTimeField(auto_now_add=True)),
                 ('date_of_update', models.DateTimeField(auto_now=True)),
-                ('gender', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.gender')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.parent')),
+                ('gender', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.gender')),
+                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.parent')),
             ],
             options={
                 'db_table': 'student',
@@ -118,8 +118,8 @@ class Migration(migrations.Migration):
                 ('comment', models.TextField(null=True)),
                 ('date_of_create', models.DateTimeField(auto_now_add=True)),
                 ('date_of_update', models.DateTimeField(auto_now=True)),
-                ('gender', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.gender')),
-                ('profession', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.profession')),
+                ('gender', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.gender')),
+                ('profession', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.profession')),
             ],
             options={
                 'db_table': 'staff',
@@ -129,8 +129,8 @@ class Migration(migrations.Migration):
             name='ClassSubject',
             fields=[
                 ('class_subject_id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('class_name', models.ForeignKey(db_column='class_name', on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.class')),
-                ('subject_id', models.ForeignKey(db_column='subject_id', on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.subject')),
+                ('class_name', models.ForeignKey(db_column='class_name', on_delete=django.db.models.deletion.DO_NOTHING, to='main.class')),
+                ('subject_id', models.ForeignKey(db_column='subject_id', on_delete=django.db.models.deletion.DO_NOTHING, to='main.subject')),
             ],
             options={
                 'db_table': 'class_subject',
@@ -141,8 +141,8 @@ class Migration(migrations.Migration):
             name='ClassStudent',
             fields=[
                 ('class_student_id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('class_name', models.ForeignKey(db_column='class_name', on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.class')),
-                ('student_id', models.ForeignKey(db_column='student_id', on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.student')),
+                ('class_name', models.ForeignKey(db_column='class_name', on_delete=django.db.models.deletion.DO_NOTHING, to='main.class')),
+                ('student_id', models.ForeignKey(db_column='student_id', on_delete=django.db.models.deletion.DO_NOTHING, to='main.student')),
             ],
             options={
                 'db_table': 'class_student',
@@ -152,16 +152,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='class',
             name='classroom_teacher',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='school_main.teacher'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='main.teacher'),
         ),
         migrations.AddField(
             model_name='class',
             name='students',
-            field=models.ManyToManyField(related_name='class_student_set', through='school_main.ClassStudent', to='school_main.student'),
+            field=models.ManyToManyField(related_name='class_student_set', through='school_main.ClassStudent', to='main.student'),
         ),
         migrations.AddField(
             model_name='class',
             name='subjects',
-            field=models.ManyToManyField(related_name='class_subject_set', through='school_main.ClassSubject', to='school_main.subject'),
+            field=models.ManyToManyField(related_name='class_subject_set', through='school_main.ClassSubject', to='main.subject'),
         ),
     ]

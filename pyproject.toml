@@ -8,6 +8,9 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.11.0"
 django = "4.2"
+sqlalchemy = "^2.0.21"
+python-decouple = "^3.8"
+django-debug-toolbar = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]
