@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<form method="GET">
+    <label>GENDER: </label>
+    {{forms.gender}}
+
+    <button type="Submit">Filter</button>
+</form>
+
+
+<table class="table table-sm table-bordered">
+    <thead class="thead-dark">
+          <tr>
+        <th scope="col">FIRST NAME</th>
+        <th scope="col">LAST NAME</th>
+        <th scope="col">DOB</th>
+        <th scope="col">STATUS</th>
+        <th scope="col">COMMENT</th>
+        <th scope="col">GENDER</th>
+        <th scope="col">PARENTS</th>
+        <th scope="col">ADDRESS</th>
+    </thead>
+    {% for student in class_students %}
+        <tr>
+            <td>{{student.first_name}}</td>
+            <td>{{student.last_name}}</td>
+            <td>{{student.date_of_birth|date:"Y M d"|upper}}</td>
+            {% if student.is_graduated %}
+                <td>GRADUATED</td>
+            {% elif not student.is_graduated and not student.is_active %}
+                <td>OTHER</td>
+            {% else %}
+                <td>ACTIVE</td>
+            {% endif %}
+            <td>{{student.comment|default_if_none:""|upper}}</td>
+            <td>{{student.gender.name|upper}}</td>
+            <td><a href="{{student.parent.get_absolute_url}}">{{student.parent|upper}}</a></td>
+            <td>{{student.parent.address|default_if_none:""|upper}}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
