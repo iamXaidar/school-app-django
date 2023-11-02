@@ -3,7 +3,7 @@ from django.core.validators import MinLengthValidator
 from django.urls import reverse
 
 
-# Create your models here.
+# Class models
 class ClassSubject(models.Model):
     class_subject_id = models.BigAutoField(primary_key=True)
     subject_id = models.ForeignKey("Subject", on_delete=models.DO_NOTHING, db_column="subject_id")
@@ -50,18 +50,26 @@ class Class(models.Model):
         verbose_name_plural = "Classes"
 
 
-class Student(models.Model):
-    student_id = models.BigAutoField(primary_key=True)
+# Persons models
+class PersonsCommonInfo(models.Model):
+    """Abstract model class contains common information about persons"""
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     date_of_birth = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    is_graduated = models.BooleanField(default=False)
-    year_of_graduate = models.CharField(null=True, blank=True, max_length=4, validators=[MinLengthValidator(4)])
     comment = models.TextField(null=True, blank=True)
     date_of_create = models.DateTimeField(auto_now_add=True)
     date_of_update = models.DateTimeField(auto_now=True)
     gender = models.ForeignKey("Gender", on_delete=models.DO_NOTHING)
+
+    class Meta:
+        abstract = True
+
+
+class Student(PersonsCommonInfo):
+    student_id = models.BigAutoField(primary_key=True)
+    is_graduated = models.BooleanField(default=False)
+    year_of_graduate = models.CharField(null=True, blank=True, max_length=4, validators=[MinLengthValidator(4)])
     parent = models.ForeignKey("Parent", on_delete=models.DO_NOTHING)
 
     def __str__(self):
@@ -71,18 +79,10 @@ class Student(models.Model):
         db_table = "student"
 
 
-class Teacher(models.Model):
+class Teacher(PersonsCommonInfo):
     teacher_id = models.BigAutoField(primary_key=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    date_of_birth = models.DateField(null=True, blank=True)
     is_classroom = models.BooleanField(null=True, blank=True, default=False)
     phone = models.CharField(null=True, blank=True, max_length=15, validators=[MinLengthValidator(7)])
-    is_active = models.BooleanField(default=True)
-    comment = models.TextField(null=True, blank=True)
-    date_of_create = models.DateTimeField(auto_now_add=True)
-    date_of_update = models.DateTimeField(auto_now=True)
-    gender = models.ForeignKey("Gender", on_delete=models.DO_NOTHING)
     subject = models.ForeignKey("Subject", on_delete=models.DO_NOTHING)
 
     def __str__(self):
@@ -100,7 +100,7 @@ class Parent(models.Model):
     mother_contact_phone = models.CharField(null=True, blank=True, max_length=15, validators=[MinLengthValidator(7)])
     father_contact_phone = models.CharField(null=True, blank=True, max_length=15, validators=[MinLengthValidator(7)])
     rp_contact_phone = models.CharField(null=True, blank=True, max_length=15, validators=[MinLengthValidator(7)])
-    comment = models.TextField(null=True, blank=True,)
+    comment = models.TextField(null=True, blank=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     date_of_create = models.DateTimeField(auto_now_add=True)
     date_of_update = models.DateTimeField(auto_now=True)
@@ -118,17 +118,9 @@ class Parent(models.Model):
         db_table = "parent"
 
 
-class Staff(models.Model):
+class Staff(PersonsCommonInfo):
     staff_id = models.BigAutoField(primary_key=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    date_of_birth = models.DateField(null=True, blank=True,)
     phone = models.CharField(null=True, blank=True, max_length=15, validators=[MinLengthValidator(7)])
-    is_active = models.BooleanField(default=True)
-    comment = models.TextField(null=True, blank=True,)
-    date_of_create = models.DateTimeField(auto_now_add=True)
-    date_of_update = models.DateTimeField(auto_now=True)
-    gender = models.ForeignKey("Gender", on_delete=models.DO_NOTHING)
     profession = models.ForeignKey("Profession", on_delete=models.DO_NOTHING)
 
     def __str__(self):
@@ -139,6 +131,7 @@ class Staff(models.Model):
         verbose_name_plural = "Staff"
 
 
+# Properties models
 class Gender(models.Model):
     gender_id = models.SmallAutoField(primary_key=True)
     name = models.CharField(max_length=6)
