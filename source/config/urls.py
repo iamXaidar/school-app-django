@@ -17,8 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import config.settings
+
+# Custom administration template
+admin.site.site_header = "High School Admin"
+admin.site.site_title = "Somewhere city"
+admin.site.index_title = "High School Administration panel"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("apps.main.urls")),
-    path("__debug__/", include("debug_toolbar.urls"))
+    path("auth/", include("django.contrib.auth.urls")),
+
 ]
+
+if config.settings.DEBUG:
+    urlpatterns = urlpatterns + [path("__debug__/", include("debug_toolbar.urls"))]

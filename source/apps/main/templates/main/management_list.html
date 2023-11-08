@@ -1,0 +1,37 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<form method="GET">
+    <label>GENDER: </label>
+    {{forms.gender}}
+    <button type="Submit">Filter</button>
+    <label>MANAGEMENT ARCHIVE: </label>
+    <button type="button"><a href="{% url 'management_archive' %}">SHOW</a></button>
+</form>
+<table class="table table-sm table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">FIRST NAME</th>
+            <th scope="col">LAST NAME</th>
+            <th scope="col">DOB</th>
+            <th scope="col">PHONE</th>
+            <th scope="col">GENDER</th>
+            <th scope="col">PROFESSION</th>
+            <th scope="col">COMMENT</th>
+        </tr>
+    </thead>
+    {% for m in management %}
+        <tr>
+            <td>{{m.first_name}}</td>
+            <td>{{m.last_name}}</td>
+            <td>{{m.date_of_birth|date:"d M Y"|upper}}</td>
+
+            <td>{{m.phone|default_if_none:""}}</td>
+            <td>{{m.gender.name|upper}}</td>
+            <td>{{m.responsibility|upper}}</td>
+            <td>{{m.comment|default_if_none:""|upper}}</td>
+        </tr>
+
+    {% endfor %}
+</table>
+{% endblock content %}

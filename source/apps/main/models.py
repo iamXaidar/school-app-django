@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 # Class models
@@ -131,6 +132,16 @@ class Staff(PersonsCommonInfo):
         verbose_name_plural = "Staff"
 
 
+class Management(PersonsCommonInfo):
+    management_id = models.SmallAutoField(primary_key=True)
+    responsibility = models.CharField(max_length=50)
+    phone = models.CharField(null=True, blank=True, max_length=15, validators=[MinLengthValidator(7)])
+
+    class Meta:
+        db_table = "management"
+        verbose_name_plural = "Management"
+
+
 # Properties models
 class Gender(models.Model):
     gender_id = models.SmallAutoField(primary_key=True)
@@ -163,3 +174,16 @@ class Subject(models.Model):
 
     class Meta:
         db_table = "subject"
+
+
+class PublicMessage(models.Model):
+    public_message_id = models.BigAutoField(primary_key=True)
+    title = models.CharField(max_length=50)
+    text = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    # Can public just users who are in Management group
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, limit_choices_to={"groups": 1})
+
+    class Meta:
+        db_table = "public_message"
+        ordering = "-public_message_id",

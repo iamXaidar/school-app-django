@@ -109,3 +109,26 @@ class GenderAdmin(admin.ModelAdmin):
 @admin.register(models.Profession)
 class ProfessionAdmin(admin.ModelAdmin):
     list_display = ["name"]
+
+
+@admin.register(models.Management)
+class ManagementAdmin(admin.ModelAdmin):
+    list_display = [
+        "management_id",
+        "first_name",
+        "last_name",
+        "date_of_birth",
+        "is_active",
+        "comment",
+        "date_of_create",
+        "date_of_update",
+        "gender",
+        "responsibility",
+    ]
+    ordering = "management_id",
+
+
+@admin.register(models.PublicMessage)
+class PublicMessageAdmin(admin.ModelAdmin):
+    list_display = ["public_message_id", "title", "text", "is_active", "author"]
+    ordering = "-public_message_id",

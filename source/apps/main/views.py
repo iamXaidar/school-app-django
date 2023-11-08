@@ -1,14 +1,18 @@
 from apps.main.models import *
 from apps.main import utils
 from django.db import models
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.views import generic
 from apps.main.forms import FilterForm
 
 
 def view_home(request):
-    context = {"menu": utils.main_menu}
-    return render(request=request, template_name="main/index.html", context=context)
+    if request.user.is_authenticated:
+        messages = PublicMessage.objects.filter(is_active=True).select_related("author")
+        context = {"menu": utils.main_menu, "messages": messages, "title": "Home"}
+        return render(request=request, template_name="main/index.html", context=context)
+
+    return render(request, "main/index.html", context={"title": "Home"})
 
 
 # Create your views here.
@@ -110,7 +114,7 @@ class TeacherList(generic.ListView, utils.GeneralContext):
         if self.request.GET and not self.request.GET.get("page"):
             # We need to create a dict with filter params and values if they exist
             kwargs = {item: self.request.GET.get(item) for item in self.request.GET if self.request.GET.get(item)}
-            qs = super().get_queryset().filter(**kwargs)
+            qs = qs.filter(**kwargs)
 
         return qs
 
@@ -128,3 +132,70 @@ class TeacherList(generic.ListView, utils.GeneralContext):
 
         return context
 
+
+class StaffList(generic.ListView, utils.GeneralContext):
+    queryset = Staff.objects.select_related("gender", "profession").only(
+        "first_name", "last_name", "date_of_birth", "phone", "gender", "profession", "comment")
+    template_name = "main/staff_list.html"
+    context_object_name = "staff"
+
+    def get_queryset(self):
+        is_active = True
+        if self.request.path == "/staff/archive/":
+            is_active = False
+        qs = super().get_queryset().filter(is_active=is_active)
+        # Filter
+        if self.request.GET and not self.request.GET.get("page"):
+            # We need to create a dict with filter params and values if they exist
+            kwargs = {item: self.request.GET.get(item) for item in self.request.GET if self.request.GET.get(item)}
+            qs = qs.filter(**kwargs)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        general_context = super().get_general_context()
+        main_context = super().get_context_data(**kwargs)
+        context = dict(list(general_context.items()) + list(main_context.items()))
+        title = "Staff"
+        form = FilterForm()
+        if self.request.path == "/staff/archive/":
+            title = "Staff archive"
+
+        context["title"] = title
+        context["forms"] = form
+
+        return context
+
+
+class ManagementList(generic.ListView, utils.GeneralContext):
+    queryset = Management.objects.select_related("gender").only(
+        "first_name", "last_name", "date_of_birth", "phone", "gender", "responsibility", "comment")
+    template_name = "main/management_list.html"
+    context_object_name = "management"
+
+    def get_queryset(self):
+        is_active = True
+        if self.request.path == "/management/archive/":
+            is_active = False
+        qs = super().get_queryset().filter(is_active=is_active)
+        # Filter
+        if self.request.GET and not self.request.GET.get("page"):
+            # We need to create a dict with filter params and values if they exist
+            kwargs = {item: self.request.GET.get(item) for item in self.request.GET if self.request.GET.get(item)}
+            qs = qs.filter(**kwargs)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        general_context = super().get_general_context()
+        main_context = super().get_context_data(**kwargs)
+        context = dict(list(general_context.items()) + list(main_context.items()))
+        title = "Management"
+        form = FilterForm()
+        if self.request.path == "/management/archive/":
+            title = "Management archive"
+
+        context["title"] = title
+        context["forms"] = form
+
+        return context

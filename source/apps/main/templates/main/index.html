@@ -1,7 +1,21 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>{{SOMEWHERE}} HIGH SCHOOL</h1>
-<p>This page may contain any common information about school and news or notes to teachers.</p>
 
+<h1>{{SOMEWHERE}} HIGH SCHOOL</h1>
+{% if request.user.is_authenticated %}
+    <p class="lead">Today is the {% now "jS F Y H:i" %}</p>
+    <h2>Public information</h2>
+    <ul>
+        {% for item in messages %}
+            <li><blockquote class="blockquote">
+                    <p class="mb-0">{{ item.text}}</p>
+                    <footer class="blockquote-footer">{{ item.author.first_name}} {{ item.author.last_name}} <cite title="Название источника">Title: {{ item.title }}</cite></footer>
+                    </blockquote>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="lead">Please, <a href="{% url 'login' %}">login    </a>to see more information!</p>
+{% endif %}
 {% endblock content %}

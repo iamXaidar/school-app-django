@@ -7,7 +7,10 @@
     <label>SUBJECT: </label>
     {{forms.subject}}
     <button type="Submit">Filter</button>
+    <label>TEACHERS ARCHIVE: </label>
+    <button type="button"><a href="{% url 'teacher_archive' %}">SHOW</a></button>
 </form>
+
 <table class="table table-sm table-bordered">
     <thead class="thead-dark">
         <tr>

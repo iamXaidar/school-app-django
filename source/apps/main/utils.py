@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+
 SCHOOL_FOUNDATION_YEAR = 2019
 ACTIVE_YEAR = 2024
 
@@ -21,3 +22,5 @@ class GeneralContext:
         context["menu"] = menu
 
         return context
+
+

@@ -1,6 +1,5 @@
 from django.urls import path, re_path
-from .views import view_home, ClassList, ClassDetail, ParentDetail, TeacherList
-import config.settings as settings
+from .views import view_home, ClassList, ClassDetail, ParentDetail, TeacherList, StaffList, ManagementList
 
 urlpatterns = [
     path("", view_home, name="home"),
@@ -10,8 +9,10 @@ urlpatterns = [
     path("parent/<int:pk>/", ParentDetail.as_view(), name="parent"),
     path("teacher/active/", TeacherList.as_view(), name="teachers"),
     path("teacher/archive/", TeacherList.as_view(), name="teacher_archive"),
+    path("staff/active/", StaffList.as_view(), name="staff"),
+    path("staff/archive/", StaffList.as_view(), name="staff_archive"),
+    path("management/active/", ManagementList.as_view(), name="management"),
+    path("management/archive/", ManagementList.as_view(), name="management_archive"),
 
 ]
 
-if settings.DEBUG:
-    ...
